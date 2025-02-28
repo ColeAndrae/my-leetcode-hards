@@ -7,17 +7,20 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     pre {
-      white-space: pre-wrap;
-      word-break: keep-all;
+      white-space: pre;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: 0.875rem;
+      overflow-x: auto;
     }
-    .code-keyword { color: #C678DD; }
-    .code-type { color: #98C379; }
-    .code-function { color: #61AFEF; }
-    .code-variable { color: #E5C07B; }
-    .code-number { color: #D19A66; }
-    .code-comment { color: #5C6370; }
-    .code-operator { color: #56B6C2; }
-    .code-punctuation { color: #ABB2BF; }
+    .code-keyword { color: #C678DD; } /* purple */
+    .code-type { color: #61AFEF; } /* blue */
+    .code-function { color: #56B6C2; } /* cyan */
+    .code-variable { color: #ABB2BF; } /* light gray */
+    .code-number { color: #D19A66; } /* orange */
+    .code-comment { color: #5C6370; } /* dark gray */
+    .code-operator { color: #56B6C2; } /* cyan */
+    .code-punctuation { color: #ABB2BF; } /* light gray */
+    .code-string { color: #98C379; } /* green */
   </style>
 </head>
 <body class="bg-gray-950 text-gray-100">
@@ -83,72 +86,10 @@
   </div>
 
   <script>
-    // Your LeetCode problems data
+    // LeetCode problems data with EXACT code from your files
     const problems = [
       {
-        id: 6,
-        number: "980",
-        title: "Unique Paths III",
-        code: `class Solution {
-public:
-
-    int m;
-    int n;
-    vector<vector<bool>> visited;
-    vector<vector<int>> mainGrid;
-    int total;
-
-    int uniquePathsIII(vector<vector<int>>& grid) {
-
-        int startRow = 0;
-        int startCol = 0;
-        int steps = 0;
-
-        m = grid[0].size();
-        n = grid.size();
-        total = 0;
-        mainGrid = grid;
-
-        for (int r = 0; r < n; r++) {
-            vector<bool> temp;
-            for (int c = 0; c < m; c++) {
-                temp.push_back(false);
-                if (grid[r][c] == 1) {
-                    startRow = r;
-                    startCol = c;
-                }
-                if (grid[r][c] >= 0) steps++;
-            }
-            visited.push_back(temp);
-        }
-
-        backtracking(startRow, startCol, steps);
-
-        return total;
-        
-    }
-
-    void backtracking(int r, int c, int steps) {
-
-        if (r < 0 || r >= n || c < 0 || c >= m || visited[r][c] || mainGrid[r][c] == -1) return;
-        if (mainGrid[r][c] == 2 && steps == 1) total++;
-
-        visited[r][c] = true;
-        steps--;
-
-        backtracking(r + 1, c, steps);
-        backtracking(r - 1, c, steps);
-        backtracking(r, c + 1, steps);
-        backtracking(r, c - 1, steps);
-
-        visited[r][c] = false;
-
-    }
-};`,
-        blog: "This solution uses backtracking to find all possible paths that visit every empty cell exactly once. The key insight is tracking both visited cells with a boolean matrix and remaining steps to ensure we've visited all empty cells. Time complexity is O(3^(N*M)) as we have at most 3 directions to explore at each step (can't go back to the previous cell)."
-      },
-      {
-        id: 4,
+        id: 1,
         number: "352",
         title: "Data Stream as Disjoint Intervals",
         code: `class SummaryRanges {
@@ -223,7 +164,7 @@ public:
         blog: "This solution uses a disjoint-set (union-find) approach to efficiently track intervals as they form. Each value maps to its interval endpoint, allowing constant-time merging of adjacent intervals. The time complexity is dominated by the sorting operation in getIntervals(), making it O(n log n) where n is the number of unique values added."
       },
       {
-        id: 1,
+        id: 2,
         number: "68",
         title: "Text Justification",
         code: `class Solution {
@@ -307,7 +248,7 @@ public:
         blog: "Text justification requires careful management of spaces between words. The approach involves greedy line filling, calculating even distribution of spaces, with special handling for the last line (left-justified) and lines with a single word. The algorithm has O(n) time complexity where n is the total number of characters across all words."
       },
       {
-        id: 2,
+        id: 3,
         number: "135",
         title: "Candy",
         code: `class Solution {
@@ -355,7 +296,7 @@ public:
         blog: "This solution uses a two-pass approach to ensure that each child with a higher rating gets more candies than their neighbors. The first pass assigns candies based on left-to-right comparisons, and the second pass adjusts for right-to-left comparisons, taking the maximum value needed to satisfy both constraints. The algorithm achieves an optimal O(n) time complexity."
       },
       {
-        id: 3,
+        id: 4,
         number: "149",
         title: "Max Points on a Line",
         code: `class Solution {
@@ -368,7 +309,7 @@ public:
         unordered_map<int, int> vert;
         for (int i = 0; i < points.size(); i++) {
             vert[points[i][0]]++;
-            maxPoints = max(maxPoints, vert[points[i][0]]);
+            numMax = max(numMax, vert[points[i][0]]);
         }
 
         for (int i = 0; i < points.size() - 1; i++) {
@@ -387,7 +328,7 @@ public:
                 if (dx != 0) {
                     double slope = (dy + 0.0) / (dx + 0.0);
                     seen[slope]++;
-                    maxPoints = max(maxPoints, (seen[slope] + 1));
+                    numMax = max(numMax, (seen[slope] + 1));
                 } 
                 
             }
@@ -473,22 +414,99 @@ public:
 
 };`,
         blog: "This problem requires parsing a string representation of a binary tree's preorder traversal with depth information. The key insight is using a map to track the last node seen at each depth level, which serves as the parent for the next node at a deeper level. This single-pass approach achieves O(n) time complexity, where n is the length of the input string."
+      },
+      {
+        id: 6,
+        number: "980",
+        title: "Unique Paths III",
+        code: `class Solution {
+public:
+
+    int m;
+    int n;
+    vector<vector<bool>> visited;
+    vector<vector<int>> mainGrid;
+    int total;
+
+    int uniquePathsIII(vector<vector<int>>& grid) {
+
+        int startRow = 0;
+        int startCol = 0;
+        int steps = 0;
+
+        m = grid[0].size();
+        n = grid.size();
+        total = 0;
+        mainGrid = grid;
+
+        for (int r = 0; r < n; r++) {
+            vector<bool> temp;
+            for (int c = 0; c < m; c++) {
+                temp.push_back(false);
+                if (grid[r][c] == 1) {
+                    startRow = r;
+                    startCol = c;
+                }
+                if (grid[r][c] >= 0) steps++;
+            }
+            visited.push_back(temp);
+        }
+
+        backtracking(startRow, startCol, steps);
+
+        return total;
+        
+    }
+
+    void backtracking(int r, int c, int steps) {
+
+        if (r < 0 || r >= n || c < 0 || c >= m || visited[r][c] || mainGrid[r][c] == -1) return;
+        if (mainGrid[r][c] == 2 && steps == 1) total++;
+
+        visited[r][c] = true;
+        steps--;
+
+        backtracking(r + 1, c, steps);
+        backtracking(r - 1, c, steps);
+        backtracking(r, c + 1, steps);
+        backtracking(r, c - 1, steps);
+
+        visited[r][c] = false;
+
+    }
+};`,
+        blog: "This solution uses backtracking to find all possible paths that visit every empty cell exactly once. The key insight is tracking both visited cells with a boolean matrix and remaining steps to ensure we've visited all empty cells. Time complexity is O(3^(N*M)) as we have at most 3 directions to explore at each step (can't go back to the previous cell)."
       }
     ];
 
-    // Function to highlight syntax in code
-    function highlightCode(code) {
-      return code
-        .replace(/\b(class|public|private|void|int|double|string|vector|unordered_map|if|else|for|while|return|new|nullptr)\b/g, '<span class="code-keyword">$1</span>')
-        .replace(/\b(TreeNode|Solution|SummaryRanges)\b/g, '<span class="code-type">$1</span>')
-        .replace(/(\w+)(?=\s*\()/g, '<span class="code-function">$1</span>')
-        .replace(/\/\/(.*)/g, '<span class="code-comment">// $1</span>')
-        .replace(/\b(\d+)\b/g, '<span class="code-number">$1</span>')
-        .replace(/(\+|\-|\*|\/|=|==|!=|&lt;|&gt;|&amp;&amp;|\|\||\!|\?|\:)/g, '<span class="code-operator">$1</span>')
-        .replace(/(\{|\}|\(|\)|\[|\]|;|,|\.)/g, '<span class="code-punctuation">$1</span>');
+    // Function to safely display code with HTML escaping
+    function displaySafeCode(code, maxLines) {
+      // Escape HTML special characters
+      const safeCode = code
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+      
+      // Get the requested number of lines or all lines
+      const lines = safeCode.split('\n');
+      const displayLines = maxLines ? lines.slice(0, maxLines) : lines;
+      
+      // Apply syntax highlighting
+      return displayLines.map(line => {
+        return line
+          .replace(/\b(class|public|private|protected|void|int|double|float|bool|char|string|vector|unordered_map|if|else|for|while|return|new|nullptr|auto|static|const|struct)\b/g, '<span class="code-keyword">$1</span>')
+          .replace(/\b(TreeNode|Solution|SummaryRanges)\b/g, '<span class="code-type">$1</span>')
+          .replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\s*(?=\()/g, '<span class="code-function">$1</span>')
+          .replace(/\/\/(.*)/g, '<span class="code-comment">//$1</span>')
+          .replace(/\b([0-9]+)\b/g, '<span class="code-number">$1</span>')
+          .replace(/(\+|\-|\*|\/|=|==|!=|&lt;|&gt;|&amp;&amp;|\|\||\!|\?|\:)/g, '<span class="code-operator">$1</span>')
+          .replace(/(\{|\}|\(|\)|\[|\]|;|,|\.)/g, '<span class="code-punctuation">$1</span>');
+      }).join('\n');
     }
 
-    // Render problems
+    // Render problems with correctly formatted code
     function renderProblems() {
       const container = document.getElementById('problem-container');
       
@@ -513,20 +531,18 @@ public:
         const body = document.createElement('div');
         body.className = 'p-4';
         
-        // Code section
+        // Code section - display exactly as in the file
         const codeBlock = document.createElement('div');
         codeBlock.className = 'bg-gray-900 p-3 rounded overflow-hidden h-64';
         
-        // Format code with syntax highlighting by escaping HTML and then highlighting
-        const codeLines = problem.code.split('\n').slice(0, 18);
-        const codeHtml = codeLines.join('\n')
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;');
+        // Use a pre element to preserve exact formatting
+        const preElement = document.createElement('pre');
+        preElement.className = 'text-xs text-gray-300 overflow-auto h-full';
         
-        const highlightedCode = highlightCode(codeHtml);
+        // Apply syntax highlighting but preserve exact spacing
+        preElement.innerHTML = displaySafeCode(problem.code, 18);
         
-        codeBlock.innerHTML = `<pre class="text-xs text-gray-300 overflow-auto h-full font-mono whitespace-pre">${highlightedCode}</pre>`;
+        codeBlock.appendChild(preElement);
         
         // Blog preview
         const blogPreview = document.createElement('p');
