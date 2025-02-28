@@ -9,18 +9,17 @@
     pre {
       white-space: pre;
       font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-      font-size: 0.875rem;
+      font-size: 0.75rem;
+      line-height: 1.2;
+      color: #e2e8f0;
       overflow-x: auto;
     }
-    .code-keyword { color: #C678DD; } /* purple */
-    .code-type { color: #61AFEF; } /* blue */
-    .code-function { color: #56B6C2; } /* cyan */
-    .code-variable { color: #ABB2BF; } /* light gray */
-    .code-number { color: #D19A66; } /* orange */
-    .code-comment { color: #5C6370; } /* dark gray */
-    .code-operator { color: #56B6C2; } /* cyan */
-    .code-punctuation { color: #ABB2BF; } /* light gray */
-    .code-string { color: #98C379; } /* green */
+    /* Simple color scheme for code */
+    .code-block {
+      background-color: #1e293b;
+      border-radius: 0.375rem;
+      padding: 1rem;
+    }
   </style>
 </head>
 <body class="bg-gray-950 text-gray-100">
@@ -86,7 +85,7 @@
   </div>
 
   <script>
-    // LeetCode problems data with EXACT code from your files
+    // LeetCode problems data - raw, unmodified code from files
     const problems = [
       {
         id: 1,
@@ -479,34 +478,7 @@ public:
       }
     ];
 
-    // Function to safely display code with HTML escaping
-    function displaySafeCode(code, maxLines) {
-      // Escape HTML special characters
-      const safeCode = code
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-      
-      // Get the requested number of lines or all lines
-      const lines = safeCode.split('\n');
-      const displayLines = maxLines ? lines.slice(0, maxLines) : lines;
-      
-      // Apply syntax highlighting
-      return displayLines.map(line => {
-        return line
-          .replace(/\b(class|public|private|protected|void|int|double|float|bool|char|string|vector|unordered_map|if|else|for|while|return|new|nullptr|auto|static|const|struct)\b/g, '<span class="code-keyword">$1</span>')
-          .replace(/\b(TreeNode|Solution|SummaryRanges)\b/g, '<span class="code-type">$1</span>')
-          .replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\s*(?=\()/g, '<span class="code-function">$1</span>')
-          .replace(/\/\/(.*)/g, '<span class="code-comment">//$1</span>')
-          .replace(/\b([0-9]+)\b/g, '<span class="code-number">$1</span>')
-          .replace(/(\+|\-|\*|\/|=|==|!=|&lt;|&gt;|&amp;&amp;|\|\||\!|\?|\:)/g, '<span class="code-operator">$1</span>')
-          .replace(/(\{|\}|\(|\)|\[|\]|;|,|\.)/g, '<span class="code-punctuation">$1</span>');
-      }).join('\n');
-    }
-
-    // Render problems with correctly formatted code
+    // Render problems - directly showing the code with minimal processing
     function renderProblems() {
       const container = document.getElementById('problem-container');
       
@@ -531,16 +503,18 @@ public:
         const body = document.createElement('div');
         body.className = 'p-4';
         
-        // Code section - display exactly as in the file
+        // Code section - simply escape HTML entities and show as-is
         const codeBlock = document.createElement('div');
-        codeBlock.className = 'bg-gray-900 p-3 rounded overflow-hidden h-64';
+        codeBlock.className = 'code-block overflow-hidden h-64';
         
-        // Use a pre element to preserve exact formatting
+        const codeText = problem.code
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+        
         const preElement = document.createElement('pre');
-        preElement.className = 'text-xs text-gray-300 overflow-auto h-full';
-        
-        // Apply syntax highlighting but preserve exact spacing
-        preElement.innerHTML = displaySafeCode(problem.code, 18);
+        preElement.className = 'overflow-auto h-full';
+        preElement.innerHTML = codeText;
         
         codeBlock.appendChild(preElement);
         
