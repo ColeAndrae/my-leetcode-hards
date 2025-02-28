@@ -44,21 +44,44 @@
       position: relative;
       width: 100%;
       max-height: 70vh;
-      overflow: hidden;
+      overflow: auto;
       background-color: #0f172a;
       border-radius: 0.375rem 0.375rem 0 0;
     }
     
     .solution-image {
-      width: 100%;
       display: block;
-      cursor: zoom-in;
-      transition: transform 0.3s ease;
+      width: 100%;
+      transform-origin: 0 0;
+      transition: transform 0.2s ease;
     }
     
     .zoomed {
-      cursor: zoom-out;
-      transform-origin: 0 0;
+      cursor: grab !important;
+    }
+    
+    /* For when actively dragging */
+    .grabbing {
+      cursor: grabbing !important;
+    }
+    
+    /* Improved scrollbar styling for better visibility */
+    .solution-image-container::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    .solution-image-container::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.8);
+    }
+    
+    .solution-image-container::-webkit-scrollbar-thumb {
+      background-color: rgba(100, 116, 139, 0.5);
+      border-radius: 4px;
+    }
+    
+    .solution-image-container::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(100, 116, 139, 0.8);
     }
     
     .close-button {
@@ -327,93 +350,169 @@
     const zoomOutBtn = document.getElementById('zoom-out');
     const resetZoomBtn = document.getElementById('reset-zoom');
     const zoomLevelDisplay = document.getElementById('zoom-level');
-    
+    const imageContainer = document.querySelector('.solution-image-container');
+
     let currentZoom = 1;
     const zoomIncrement = 0.25;
     const maxZoom = 3;
     const minZoom = 0.5;
-    
-    function updateZoomDisplay() {
-      zoomLevelDisplay.textContent = `${Math.round(currentZoom * 100)}%`;
-      solutionImage.style.transform = `scale(${currentZoom})`;
+
+    // Function to handle zoom operations
+    function updateZoom(newZoom) {
+      // Clamp zoom level between min and max
+      currentZoom = Math.max(minZoom, Math.min(maxZoom, newZoom));
       
+      // Update zoom level display
+      zoomLevelDisplay.textContent = `${Math.round(currentZoom * 100)}%`;
+      
+      // Get dimensions before applying zoom
+      const containerRect = imageContainer.getBoundingClientRect();
+      const imgRect = solutionImage.getBoundingClientRect();
+      
+      // Calculate scroll positions relative to the center of the viewport
+      const centerX = (imageContainer.scrollLeft + containerRect.width / 2) / currentZoom;
+      const centerY = (imageContainer.scrollTop + containerRect.height / 2) / currentZoom;
+      
+      // Apply zoom transform
+      solutionImage.style.transform = `scale(${currentZoom})`;
+      solutionImage.style.transformOrigin = '0 0';
+      
+      // Set appropriate cursor based on zoom level
       if (currentZoom > 1) {
         solutionImage.classList.add('zoomed');
+        solutionImage.style.cursor = 'grab';
       } else {
         solutionImage.classList.remove('zoomed');
+        solutionImage.style.cursor = 'zoom-in';
       }
+      
+      // Adjust scroll position to keep the center point after zoom
+      // Need to wait for the browser to update the layout after changing the transform
+      setTimeout(() => {
+        imageContainer.scrollLeft = centerX * currentZoom - containerRect.width / 2;
+        imageContainer.scrollTop = centerY * currentZoom - containerRect.height / 2;
+      }, 0);
     }
-    
+
+    // Zoom in button
     zoomInBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (currentZoom < maxZoom) {
-        currentZoom += zoomIncrement;
-        updateZoomDisplay();
-      }
+      updateZoom(currentZoom + zoomIncrement);
     });
-    
+
+    // Zoom out button
     zoomOutBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (currentZoom > minZoom) {
-        currentZoom -= zoomIncrement;
-        updateZoomDisplay();
-      }
+      updateZoom(currentZoom - zoomIncrement);
     });
-    
+
+    // Reset zoom button
     resetZoomBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      currentZoom = 1;
-      updateZoomDisplay();
+      updateZoom(1);
     });
-    
+
     // Toggle zoom on image click
     solutionImage.addEventListener('click', (e) => {
       e.stopPropagation();
       if (currentZoom === 1) {
-        currentZoom = 2; // Zoom in to 200%
+        // Zoom in to the clicked position
+        const rect = imageContainer.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Save the current scroll position
+        const scrollLeft = imageContainer.scrollLeft;
+        const scrollTop = imageContainer.scrollTop;
+        
+        // Apply zoom centered on click position
+        solutionImage.style.transformOrigin = `${x}px ${y}px`;
+        updateZoom(2);
       } else {
-        currentZoom = 1; // Reset to 100%
+        updateZoom(1);
       }
-      updateZoomDisplay();
     });
 
-    // Drag to pan when zoomed in
+    // Dragging functionality
     let isDragging = false;
-    let startX, startY, initialScrollX, initialScrollY;
-    const imageContainer = document.querySelector('.solution-image-container');
-    
+    let startX, startY, scrollLeft, scrollTop;
+
     solutionImage.addEventListener('mousedown', (e) => {
       if (currentZoom > 1) {
         isDragging = true;
         startX = e.clientX;
         startY = e.clientY;
-        initialScrollX = imageContainer.scrollLeft;
-        initialScrollY = imageContainer.scrollTop;
+        scrollLeft = imageContainer.scrollLeft;
+        scrollTop = imageContainer.scrollTop;
         solutionImage.style.cursor = 'grabbing';
         e.preventDefault();
       }
     });
-    
-    document.addEventListener('mousemove', (e) => {
-      if (isDragging) {
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        imageContainer.scrollLeft = initialScrollX - dx;
-        imageContainer.scrollTop = initialScrollY - dy;
-      }
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      
+      e.preventDefault();
+      const x = e.clientX - startX;
+      const y = e.clientY - startY;
+      
+      imageContainer.scrollLeft = scrollLeft - x;
+      imageContainer.scrollTop = scrollTop - y;
     });
-    
-    document.addEventListener('mouseup', () => {
+
+    window.addEventListener('mouseup', () => {
       if (isDragging) {
         isDragging = false;
-        solutionImage.style.cursor = currentZoom > 1 ? 'zoom-out' : 'zoom-in';
+        solutionImage.style.cursor = currentZoom > 1 ? 'grab' : 'zoom-in';
+      }
+    });
+
+    // Make sure scroll doesn't break if mouse leaves the window
+    window.addEventListener('mouseleave', () => {
+      if (isDragging) {
+        isDragging = false;
+        solutionImage.style.cursor = currentZoom > 1 ? 'grab' : 'zoom-in';
+      }
+    });
+
+    // Mouse wheel zoom
+    imageContainer.addEventListener('wheel', (e) => {
+      if (e.ctrlKey) {
+        e.preventDefault();
+        const zoomChange = e.deltaY > 0 ? -zoomIncrement : zoomIncrement;
+        
+        // Get mouse position relative to container
+        const rect = imageContainer.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Set transform origin to mouse position
+        solutionImage.style.transformOrigin = `${x}px ${y}px`;
+        
+        updateZoom(currentZoom + zoomChange);
+      }
+    }, { passive: false });
+
+    // Keyboard shortcuts for zoom
+    document.addEventListener('keydown', function(e) {
+      if (modal.style.display === 'block') {
+        if (e.key === '+' || e.key === '=') {
+          e.preventDefault();
+          updateZoom(currentZoom + zoomIncrement);
+        } else if (e.key === '-' || e.key === '_') {
+          e.preventDefault();
+          updateZoom(currentZoom - zoomIncrement);
+        } else if (e.key === '0') {
+          e.preventDefault();
+          updateZoom(1);
+        }
       }
     });
 
     function openModal(problem) {
       // Reset zoom when opening modal
       currentZoom = 1;
-      updateZoomDisplay();
+      updateZoom(1);
       
       // Set modal content
       modalTitle.textContent = `${problem.number}. ${problem.title} - Solution`;
@@ -445,29 +544,6 @@
     window.addEventListener('click', function(event) {
       if (event.target === modal) {
         closeModal();
-      }
-    });
-
-    // Keyboard shortcuts for zoom
-    document.addEventListener('keydown', function(e) {
-      if (modal.style.display === 'block') {
-        if (e.key === '+' || e.key === '=') {
-          if (currentZoom < maxZoom) {
-            currentZoom += zoomIncrement;
-            updateZoomDisplay();
-          }
-          e.preventDefault();
-        } else if (e.key === '-' || e.key === '_') {
-          if (currentZoom > minZoom) {
-            currentZoom -= zoomIncrement;
-            updateZoomDisplay();
-          }
-          e.preventDefault();
-        } else if (e.key === '0') {
-          currentZoom = 1;
-          updateZoomDisplay();
-          e.preventDefault();
-        }
       }
     });
 
@@ -535,25 +611,4 @@
           openModal(problem);
         });
         
-        footer.appendChild(viewButton);
-        
-        // Append all sections to card
-        card.appendChild(header);
-        card.appendChild(body);
-        card.appendChild(footer);
-        
-        // Add click event to the entire card to open modal
-        card.addEventListener('click', () => {
-          openModal(problem);
-        });
-        
-        // Add card to container
-        container.appendChild(card);
-      });
-    }
-    
-    // Initialize the page
-    renderProblems();
-  </script>
-</body>
-</html>
+        footer
