@@ -100,13 +100,17 @@
       background-color: rgba(55, 65, 81, 0.9);
     }
     
+    /* Fixed position for zoom controls so they don't scroll with content */
     .zoom-controls {
-      position: absolute;
-      bottom: 1rem;
-      right: 1rem;
+      position: fixed;
+      bottom: 1.5rem;
+      right: 2rem;
       display: flex;
       gap: 0.5rem;
       z-index: 60;
+      background-color: rgba(15, 23, 42, 0.7);
+      border-radius: 0.5rem;
+      padding: 0.5rem;
     }
     
     .zoom-button {
@@ -127,15 +131,16 @@
       background-color: rgba(55, 65, 81, 0.9);
     }
     
+    /* Fixed position for zoom level display */
     .zoom-level {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 2rem;
       background-color: rgba(31, 41, 55, 0.8);
       border-radius: 0.25rem;
       padding: 0.25rem 0.5rem;
       color: #e5e7eb;
       font-size: 0.75rem;
-      position: absolute;
-      bottom: 1rem;
-      left: 1rem;
       z-index: 60;
     }
   </style>
@@ -187,7 +192,7 @@
         </button>
         <div id="modal-header" class="p-6 border-b border-gray-700 bg-gray-800 flex justify-between items-center">
           <h2 class="text-xl font-bold text-gray-200">Problem Solution</h2>
-          <span class="bg-gray-900 text-red-400 text-xs font-medium px-2.5 py-0.5 rounded-full border border-gray-700">
+          <span class="bg-gray-900 text-red-400 text-xs font-medium px-2.5 py-0.5 rounded-full border border-gray-700 mr-8">
             Hard
           </span>
         </div>
@@ -383,7 +388,7 @@
         solutionImage.style.cursor = 'grab';
       } else {
         solutionImage.classList.remove('zoomed');
-        solutionImage.style.cursor = 'zoom-in';
+        solutionImage.style.cursor = 'default';
       }
       
       // Adjust scroll position to keep the center point after zoom
@@ -412,24 +417,8 @@
       updateZoom(1);
     });
 
-    // Toggle zoom on image click
-    solutionImage.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (currentZoom === 1) {
-        // Zoom in to the clicked position
-        const rect = imageContainer.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        // Apply zoom centered on click position
-        solutionImage.style.transformOrigin = `${x}px ${y}px`;
-        updateZoom(2);
-      } else {
-        updateZoom(1);
-      }
-    });
-
-    // Dragging functionality
+    // Removed click zoom functionality
+    // Only keep dragging functionality when zoomed in
     let isDragging = false;
     let startX, startY, scrollLeft, scrollTop;
 
@@ -459,7 +448,7 @@
     window.addEventListener('mouseup', () => {
       if (isDragging) {
         isDragging = false;
-        solutionImage.style.cursor = currentZoom > 1 ? 'grab' : 'zoom-in';
+        solutionImage.style.cursor = currentZoom > 1 ? 'grab' : 'default';
       }
     });
 
@@ -467,11 +456,11 @@
     window.addEventListener('mouseleave', () => {
       if (isDragging) {
         isDragging = false;
-        solutionImage.style.cursor = currentZoom > 1 ? 'grab' : 'zoom-in';
+        solutionImage.style.cursor = currentZoom > 1 ? 'grab' : 'default';
       }
     });
 
-    // Mouse wheel zoom
+    // Mouse wheel zoom with Ctrl key
     imageContainer.addEventListener('wheel', (e) => {
       if (e.ctrlKey) {
         e.preventDefault();
@@ -609,12 +598,12 @@
         
         footer.appendChild(viewButton);
         
-// Append all sections to card
+        // Append all sections to card
         card.appendChild(header);
         card.appendChild(body);
         card.appendChild(footer);
         
-        // Add click event to the entire card to open modal
+// Add click event to the entire card to open modal
         card.addEventListener('click', () => {
           openModal(problem);
         });
