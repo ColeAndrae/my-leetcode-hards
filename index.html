@@ -86,6 +86,68 @@
     // Your LeetCode problems data
     const problems = [
       {
+        id: 6,
+        number: "980",
+        title: "Unique Paths III",
+        code: `class Solution {
+public:
+
+    int m;
+    int n;
+    vector<vector<bool>> visited;
+    vector<vector<int>> mainGrid;
+    int total;
+
+    int uniquePathsIII(vector<vector<int>>& grid) {
+
+        int startRow = 0;
+        int startCol = 0;
+        int steps = 0;
+
+        m = grid[0].size();
+        n = grid.size();
+        total = 0;
+        mainGrid = grid;
+
+        for (int r = 0; r < n; r++) {
+            vector<bool> temp;
+            for (int c = 0; c < m; c++) {
+                temp.push_back(false);
+                if (grid[r][c] == 1) {
+                    startRow = r;
+                    startCol = c;
+                }
+                if (grid[r][c] >= 0) steps++;
+            }
+            visited.push_back(temp);
+        }
+
+        backtracking(startRow, startCol, steps);
+
+        return total;
+        
+    }
+
+    void backtracking(int r, int c, int steps) {
+
+        if (r < 0 || r >= n || c < 0 || c >= m || visited[r][c] || mainGrid[r][c] == -1) return;
+        if (mainGrid[r][c] == 2 && steps == 1) total++;
+
+        visited[r][c] = true;
+        steps--;
+
+        backtracking(r + 1, c, steps);
+        backtracking(r - 1, c, steps);
+        backtracking(r, c + 1, steps);
+        backtracking(r, c - 1, steps);
+
+        visited[r][c] = false;
+
+    }
+};`,
+        blog: "This solution uses backtracking to find all possible paths that visit every empty cell exactly once. The key insight is tracking both visited cells with a boolean matrix and remaining steps to ensure we've visited all empty cells. Time complexity is O(3^(N*M)) as we have at most 3 directions to explore at each step (can't go back to the previous cell)."
+      },
+      {
         id: 4,
         number: "352",
         title: "Data Stream as Disjoint Intervals",
@@ -414,6 +476,18 @@ public:
       }
     ];
 
+    // Function to highlight syntax in code
+    function highlightCode(code) {
+      return code
+        .replace(/\b(class|public|private|void|int|double|string|vector|unordered_map|if|else|for|while|return|new|nullptr)\b/g, '<span class="code-keyword">$1</span>')
+        .replace(/\b(TreeNode|Solution|SummaryRanges)\b/g, '<span class="code-type">$1</span>')
+        .replace(/(\w+)(?=\s*\()/g, '<span class="code-function">$1</span>')
+        .replace(/\/\/(.*)/g, '<span class="code-comment">// $1</span>')
+        .replace(/\b(\d+)\b/g, '<span class="code-number">$1</span>')
+        .replace(/(\+|\-|\*|\/|=|==|!=|&lt;|&gt;|&amp;&amp;|\|\||\!|\?|\:)/g, '<span class="code-operator">$1</span>')
+        .replace(/(\{|\}|\(|\)|\[|\]|;|,|\.)/g, '<span class="code-punctuation">$1</span>');
+    }
+
     // Render problems
     function renderProblems() {
       const container = document.getElementById('problem-container');
@@ -443,21 +517,16 @@ public:
         const codeBlock = document.createElement('div');
         codeBlock.className = 'bg-gray-900 p-3 rounded overflow-hidden h-64';
         
-        // Format code with syntax highlighting
+        // Format code with syntax highlighting by escaping HTML and then highlighting
         const codeLines = problem.code.split('\n').slice(0, 18);
-        const formattedCode = codeLines.map(line => {
-          // Apply syntax highlighting
-          return line
-            .replace(/\b(class|public|private|void|int|double|string|vector|unordered_map|if|else|for|while|return|new|nullptr)\b/g, '<span class="code-keyword">$1</span>')
-            .replace(/\b(TreeNode|Solution|SummaryRanges)\b/g, '<span class="code-type">$1</span>')
-            .replace(/(\w+)(?=\s*\()/g, '<span class="code-function">$1</span>')
-            .replace(/\/\/(.*)/g, '<span class="code-comment">// $1</span>')
-            .replace(/\b(\d+)\b/g, '<span class="code-number">$1</span>')
-            .replace(/(\+|\-|\*|\/|=|==|!=|<|>|&&|\|\||\!|\?|\:)/g, '<span class="code-operator">$1</span>')
-            .replace(/(\{|\}|\(|\)|\[|\]|;|,|\.)/g, '<span class="code-punctuation">$1</span>');
-        }).join('\n');
+        const codeHtml = codeLines.join('\n')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
         
-        codeBlock.innerHTML = `<pre class="text-xs text-gray-300 overflow-auto h-full font-mono whitespace-pre">${formattedCode}</pre>`;
+        const highlightedCode = highlightCode(codeHtml);
+        
+        codeBlock.innerHTML = `<pre class="text-xs text-gray-300 overflow-auto h-full font-mono whitespace-pre">${highlightedCode}</pre>`;
         
         // Blog preview
         const blogPreview = document.createElement('p');
