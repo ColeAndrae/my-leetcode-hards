@@ -9,17 +9,26 @@
     pre {
       white-space: pre;
       font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-      font-size: 0.75rem;
+      font-size: 0.65rem; /* Smaller text */
       line-height: 1.2;
-      color: #e2e8f0;
+      color: #d8d8ff; /* Light blue-purple text */
       overflow-x: auto;
     }
-    /* Simple color scheme for code */
     .code-block {
-      background-color: #1e293b;
+      background-color: #1e1e2e; /* Dark blue-purple background */
       border-radius: 0.375rem;
       padding: 1rem;
     }
+    /* Pastel blue and purple syntax highlighting */
+    .keyword { color: #c4a7e7; } /* Pastel purple */
+    .type { color: #a4b9ef; } /* Pastel blue */
+    .function { color: #7dc4e4; } /* Light blue */
+    .variable { color: #b4befe; } /* Lavender */
+    .number { color: #f5c2e7; } /* Pink-purple */
+    .string { color: #a6e3a1; } /* Pastel green */
+    .comment { color: #9399b2; } /* Muted gray-purple */
+    .operator { color: #89dceb; } /* Pastel cyan */
+    .punctuation { color: #bac2de; } /* Light gray-blue */
   </style>
 </head>
 <body class="bg-gray-950 text-gray-100">
@@ -478,7 +487,26 @@ public:
       }
     ];
 
-    // Render problems - directly showing the code with minimal processing
+    // Function to add pastel blue/purple syntax highlighting to code
+    function applyPastelSyntaxHighlighting(code) {
+      // Escape HTML entities first
+      const escapedCode = code
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+      
+      // Apply pastel blue/purple syntax highlighting
+      return escapedCode
+        .replace(/\b(class|public|private|protected|void|int|double|string|vector|unordered_map|if|else|for|while|return|new|nullptr|struct)\b/g, '<span style="color:#c4a7e7">$1</span>') // keywords - pastel purple
+        .replace(/\b(TreeNode|Solution|SummaryRanges)\b/g, '<span style="color:#a4b9ef">$1</span>') // types - pastel blue
+        .replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\s*(?=\()/g, '<span style="color:#7dc4e4">$1</span>') // functions - light blue
+        .replace(/\/\/(.*)/g, '<span style="color:#9399b2">//$1</span>') // comments - muted gray-purple
+        .replace(/\b([0-9]+)\b/g, '<span style="color:#f5c2e7">$1</span>') // numbers - pink-purple
+        .replace(/(\+|\-|\*|\/|=|==|!=|&lt;|&gt;|&amp;&amp;|\|\||\!|\?|\:)/g, '<span style="color:#89dceb">$1</span>') // operators - pastel cyan
+        .replace(/(\{|\}|\(|\)|\[|\]|;|,|\.)/g, '<span style="color:#bac2de">$1</span>'); // punctuation - light gray-blue
+    }
+
+    // Render problems with better syntax highlighting
     function renderProblems() {
       const container = document.getElementById('problem-container');
       
@@ -503,18 +531,13 @@ public:
         const body = document.createElement('div');
         body.className = 'p-4';
         
-        // Code section - simply escape HTML entities and show as-is
+        // Code section with pastel blue/purple syntax highlighting
         const codeBlock = document.createElement('div');
         codeBlock.className = 'code-block overflow-hidden h-64';
         
-        const codeText = problem.code
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;');
-        
         const preElement = document.createElement('pre');
         preElement.className = 'overflow-auto h-full';
-        preElement.innerHTML = codeText;
+        preElement.innerHTML = applyPastelSyntaxHighlighting(problem.code);
         
         codeBlock.appendChild(preElement);
         
