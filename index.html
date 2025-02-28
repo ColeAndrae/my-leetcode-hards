@@ -421,10 +421,6 @@
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         
-        // Save the current scroll position
-        const scrollLeft = imageContainer.scrollLeft;
-        const scrollTop = imageContainer.scrollTop;
-        
         // Apply zoom centered on click position
         solutionImage.style.transformOrigin = `${x}px ${y}px`;
         updateZoom(2);
@@ -607,8 +603,4 @@
         
         // Add click event to view button
         viewButton.addEventListener('click', (e) => {
-          e.stopPropagation();
-          openModal(problem);
-        });
-        
-        footer
+          e.stop
