@@ -603,4 +603,29 @@
         
         // Add click event to view button
         viewButton.addEventListener('click', (e) => {
-          e.stop
+          e.stopPropagation();
+          openModal(problem);
+        });
+        
+        footer.appendChild(viewButton);
+        
+// Append all sections to card
+        card.appendChild(header);
+        card.appendChild(body);
+        card.appendChild(footer);
+        
+        // Add click event to the entire card to open modal
+        card.addEventListener('click', () => {
+          openModal(problem);
+        });
+        
+        // Add card to container
+        container.appendChild(card);
+      });
+    }
+    
+    // Initialize the page
+    renderProblems();
+  </script>
+</body>
+</html>
