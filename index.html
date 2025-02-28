@@ -6,18 +6,12 @@
   <title>My LeetCode Hards</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    pre {
-      white-space: pre;
-      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-      font-size: 0.25rem; /* Exactly half the size (0.5 -> 0.25) */
-      line-height: 1.2;
-      color: #e2e8f0;
-      overflow-x: auto;
-    }
-    .code-block {
+    .code-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       background-color: #1e293b;
       border-radius: 0.375rem;
-      padding: 1rem;
     }
   </style>
 </head>
@@ -84,400 +78,53 @@
   </div>
 
   <script>
-    // LeetCode problems data - raw, unmodified code from files
+    // LeetCode problems data with image paths
     const problems = [
       {
         id: 1,
         number: "352",
         title: "Data Stream as Disjoint Intervals",
-        code: `class SummaryRanges {
-public:
-
-    unordered_map<int, int> intervalMap;
-    vector<int> values;
-
-    SummaryRanges() {
-        
-    }
-    
-    void addNum(int value) {
-
-        value++;
-
-        if (!intervalMap[value]) {
-
-        values.push_back(value);
-
-        if (intervalMap[value - 1] && intervalMap[value + 1]) {
-            intervalMap[value - 1] = intervalMap[value + 1];
-        } else if (intervalMap[value + 1]) {
-            intervalMap[value] = intervalMap[value + 1];
-        } else if (intervalMap[value - 1]) {
-            intervalMap[value] = value;
-            intervalMap[value - 1] = intervalMap[value];
-        } else {
-            intervalMap[value] = value;
-        }
-
-        }
-        
-    }
-    
-    vector<vector<int>> getIntervals() {
-
-        sort(values.begin(), values.end());
-        vector<vector<int>> intervals;
-
-        unordered_map<int, int> endpoints;
-
-        for (int i = 0; i < values.size(); i++) {
-
-            int endpoint = values[i];
-            while (intervalMap[endpoint] != endpoint) {
-                endpoint = intervalMap[endpoint];
-            }
-
-            if (!endpoints[endpoint] && intervalMap[values[i]]) {
-                vector<int> interval;
-                interval.push_back(values[i] - 1);
-                interval.push_back(endpoint - 1);
-                intervals.push_back(interval);
-            }
-
-            endpoints[endpoint]++;
-
-        }
-
-        return intervals;
-        
-    }
-};
-
-/**
- * Your SummaryRanges object will be instantiated and called as such:
- * SummaryRanges* obj = new SummaryRanges();
- * obj->addNum(value);
- * vector<vector<int>> param_2 = obj->getIntervals();
- */`,
+        imagePath: "images/352_solution.png", // Replace with your actual image paths
         blog: "This solution uses a disjoint-set (union-find) approach to efficiently track intervals as they form. Each value maps to its interval endpoint, allowing constant-time merging of adjacent intervals. The time complexity is dominated by the sorting operation in getIntervals(), making it O(n log n) where n is the number of unique values added."
       },
       {
         id: 2,
         number: "68",
         title: "Text Justification",
-        code: `class Solution {
-public:
-    vector<string> fullJustify(vector<string>& words, int maxWidth) {
-
-        vector<string> solution;
-
-        int wordIndex = 0;
-        while (wordIndex < words.size()) {
-
-            string tempLine = "";
-            int lineSize = 0;
-            int charCount = 0;
-            int wordCount = 0;
-
-            while ((wordIndex < words.size()) &&
-                   (lineSize + words[wordIndex].size() <= maxWidth)) {
-                charCount += words[wordIndex].size();
-                lineSize += words[wordIndex].size() + 1;
-                wordIndex++;
-                wordCount++;
-            }
-
-            int spaceCount = maxWidth - charCount;
-
-            int spaceAvg = spaceCount;
-            int spaceRem = 0;
-
-            if (wordCount > 1) {
-                spaceAvg = spaceCount / (wordCount - 1);
-                spaceRem = spaceCount % (wordCount - 1);
-            }
-
-            if (wordIndex == words.size()) {
-
-                for (int i = wordIndex - wordCount; i < wordIndex; i++) {
-                    tempLine += words[i];
-                    if (spaceCount > 0) {
-                        spaceCount--;
-                        tempLine += " ";
-                    }
-                }
-                for (int i = 0; i < spaceCount; i++) {
-                    tempLine += " ";
-                }
-
-            } else if (wordCount == 1) {
-
-                tempLine += words[wordIndex - 1];
-                for (int i = 0; i < spaceCount; i++) {
-                    tempLine += " ";
-                }
-
-            } else {
-
-                for (int i = wordIndex - wordCount; i < wordIndex; i++) {
-
-                    if (i < wordIndex - 1) {
-                        tempLine += words[i];
-                        for (int n = 0; n < spaceAvg; n++) {
-                            tempLine += " ";
-                        }
-                        if (spaceRem > 0) {
-                            tempLine += " ";
-                            spaceRem--;
-                        }
-                    } else {
-                        tempLine += words[i];
-                    }
-                }
-            }
-
-            solution.push_back(tempLine);
-        }
-
-        return solution;
-        
-    }
-};`,
+        imagePath: "images/68_solution.png",
         blog: "Text justification requires careful management of spaces between words. The approach involves greedy line filling, calculating even distribution of spaces, with special handling for the last line (left-justified) and lines with a single word. The algorithm has O(n) time complexity where n is the total number of characters across all words."
       },
       {
         id: 3,
         number: "135",
         title: "Candy",
-        code: `class Solution {
-public:
-
-    int candy(vector<int>& ratings) {
-
-        unordered_map<int, int> indexValues;
-        vector<int> greedyVector;
-
-        int height = 1;
-        indexValues[0] = 1;
-        for (int i = 1; i < ratings.size(); i++) { 
-
-            if (ratings[i] > ratings[i - 1]) {
-                height++;
-            } else {
-                height = 1;
-            }
-
-            indexValues[i] = height;
-
-        }
-
-        height = 1;
-        int totalCandies = indexValues[ratings.size() - 1];
-
-        for (int i = ratings.size() - 2; i >= 0; i--) { 
-
-            if (ratings[i] > ratings[i + 1]) {
-                height++;
-            } else {
-                height = 1;
-            }
-
-            totalCandies += max(indexValues[i], height);
-
-        }
-
-        return totalCandies;
-
-    }
-
-};`,
+        imagePath: "images/135_solution.png",
         blog: "This solution uses a two-pass approach to ensure that each child with a higher rating gets more candies than their neighbors. The first pass assigns candies based on left-to-right comparisons, and the second pass adjusts for right-to-left comparisons, taking the maximum value needed to satisfy both constraints. The algorithm achieves an optimal O(n) time complexity."
       },
       {
         id: 4,
         number: "149",
         title: "Max Points on a Line",
-        code: `class Solution {
-public:
-    int maxPoints(vector<vector<int>>& points) {
-
-        if (points.size() == 1) return 1;
-
-        int maxPoints = 0;
-        unordered_map<int, int> vert;
-        for (int i = 0; i < points.size(); i++) {
-            vert[points[i][0]]++;
-            numMax = max(numMax, vert[points[i][0]]);
-        }
-
-        for (int i = 0; i < points.size() - 1; i++) {
-
-            unordered_map<double, int> seen;
-
-            int y1 = points[i][1];
-            int x1 = points[i][0];
-            for (int n = i + 1; n < points.size(); n++) {
-
-                int y2 = points[n][1];
-                int x2 = points[n][0];
-                int dy = (y2 - y1);
-                int dx = (x2 - x1);
-
-                if (dx != 0) {
-                    double slope = (dy + 0.0) / (dx + 0.0);
-                    seen[slope]++;
-                    numMax = max(numMax, (seen[slope] + 1));
-                } 
-                
-            }
-
-        }
-
-        return maxPoints;
-
-    }
-};`,
+        imagePath: "images/149_solution.png",
         blog: "Finding the maximum number of points on a line requires checking all possible lines. This solution first handles vertical lines separately, then computes slopes between each pair of points to count collinear points. By storing slope frequencies in a hash map, we achieve O(n²) time complexity, which is optimal for this problem as we must check all pairs of points."
       },
       {
         id: 5,
         number: "1028",
         title: "Recover a Tree From Preorder Traversal",
-        code: `/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
-class Solution {
-public:
-
-    TreeNode* recoverFromPreorder(string traversal) {
-        
-        traversal += '-';
-        unordered_map<int, TreeNode*> depthLastNode;
-
-        string stringVal = "";
-        int index = 0;
-        while (traversal[index] != '-') {
-            stringVal += traversal[index];
-            index++;
-        }
-
-        int startVal = stoi(stringVal);
-
-        TreeNode* root = new TreeNode(startVal);
-        depthLastNode[0] = root;
-
-        int depth = 0;
-        for (int i = index; i < traversal.size(); i++) {
-
-            if (traversal[i] == '-') {
-                depth++;
-            } else {
-
-                stringVal = "";
-                while (traversal[i] != '-') {
-                    stringVal += traversal[i];
-                    i++;
-                }
-
-                i--;
-
-                int currVal = stoi(stringVal);
-                TreeNode* currNode = new TreeNode(currVal);
-                depthLastNode[depth] = currNode;
-                
-                TreeNode* parent = depthLastNode[depth - 1];
-                if (!parent->left) {
-                    parent->left = currNode;
-                } else {
-                    parent->right = currNode;
-                }
-
-                depth = 0;
-
-            }
-
-        }
-
-        return root;
-
-    }
-
-};`,
+        imagePath: "images/1028_solution.png",
         blog: "This problem requires parsing a string representation of a binary tree's preorder traversal with depth information. The key insight is using a map to track the last node seen at each depth level, which serves as the parent for the next node at a deeper level. This single-pass approach achieves O(n) time complexity, where n is the length of the input string."
       },
       {
         id: 6,
         number: "980",
         title: "Unique Paths III",
-        code: `class Solution {
-public:
-
-    int m;
-    int n;
-    vector<vector<bool>> visited;
-    vector<vector<int>> mainGrid;
-    int total;
-
-    int uniquePathsIII(vector<vector<int>>& grid) {
-
-        int startRow = 0;
-        int startCol = 0;
-        int steps = 0;
-
-        m = grid[0].size();
-        n = grid.size();
-        total = 0;
-        mainGrid = grid;
-
-        for (int r = 0; r < n; r++) {
-            vector<bool> temp;
-            for (int c = 0; c < m; c++) {
-                temp.push_back(false);
-                if (grid[r][c] == 1) {
-                    startRow = r;
-                    startCol = c;
-                }
-                if (grid[r][c] >= 0) steps++;
-            }
-            visited.push_back(temp);
-        }
-
-        backtracking(startRow, startCol, steps);
-
-        return total;
-        
-    }
-
-    void backtracking(int r, int c, int steps) {
-
-        if (r < 0 || r >= n || c < 0 || c >= m || visited[r][c] || mainGrid[r][c] == -1) return;
-        if (mainGrid[r][c] == 2 && steps == 1) total++;
-
-        visited[r][c] = true;
-        steps--;
-
-        backtracking(r + 1, c, steps);
-        backtracking(r - 1, c, steps);
-        backtracking(r, c + 1, steps);
-        backtracking(r, c - 1, steps);
-
-        visited[r][c] = false;
-
-    }
-};`,
+        imagePath: "images/980_solution.png",
         blog: "This solution uses backtracking to find all possible paths that visit every empty cell exactly once. The key insight is tracking both visited cells with a boolean matrix and remaining steps to ensure we've visited all empty cells. Time complexity is O(3^(N*M)) as we have at most 3 directions to explore at each step (can't go back to the previous cell)."
       }
     ];
 
-    // Render problems - directly showing the code with minimal processing
+    // Render problems with images
     function renderProblems() {
       const container = document.getElementById('problem-container');
       
@@ -502,20 +149,16 @@ public:
         const body = document.createElement('div');
         body.className = 'p-4';
         
-        // Code section - simply escape HTML entities and show as-is
+        // Code image
         const codeBlock = document.createElement('div');
-        codeBlock.className = 'code-block overflow-hidden h-64';
+        codeBlock.className = 'overflow-hidden h-64 bg-gray-900 rounded';
         
-        const codeText = problem.code
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;');
+        const codeImage = document.createElement('img');
+        codeImage.src = problem.imagePath;
+        codeImage.alt = `Code for ${problem.title}`;
+        codeImage.className = 'code-image';
         
-        const preElement = document.createElement('pre');
-        preElement.className = 'overflow-auto h-full';
-        preElement.innerHTML = codeText;
-        
-        codeBlock.appendChild(preElement);
+        codeBlock.appendChild(codeImage);
         
         // Blog preview
         const blogPreview = document.createElement('p');
