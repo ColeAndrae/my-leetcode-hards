@@ -265,49 +265,49 @@
         number: "352",
         title: "Data Stream as Disjoint Intervals",
         imagePath: "images/352_solution.png", 
-        blog: "I first approached the problem via the “Random Question” button, and the gears in my head immediately started turning. This question requires the design of multiple functions, but when I heard the word “disjoint”, I immediately thought of CPSC 221 and our discussion surrounding disjoint sets. I started to draw a diagram of the first test case, and I implemented the addNum function using an unordered map. Thankfully, this intuition brought me surprisingly close to the solution, and with very little error. My second intuition was to add each value to an array that I would sort at the beginning of each getIntervals call. With some debugging, this design eventually worked with perfect runtime, and decent memory usage."
+        blog: "I first approached this problem via the “Random Question” button, and the gears in my head immediately started turning. This question requires the design of multiple functions, but when I heard the word “disjoint”, I immediately thought of CPSC 221, and our discussion surrounding disjoint sets. I started to draw a diagram of the first test-case, and then I implemented the addNum function using an unordered map. Thankfully, this intuition brought me surprisingly close to the solution with very little error. My second intuition was to add each value to an array that I would sort at the beginning of each getIntervals call. With some debugging, this design eventually worked with perfect runtime, and decent memory usage."
       },
       {
         id: 2,
         number: "980",
         title: "Unique Paths III",
         imagePath: "images/980_solution.png",
-        blog: "Unique paths III is considered an “easy” hard problem, but I found it incredibly useful for developing recursive intuition that would leak its way into many other hard problems. I knew I had to implement a backtracking algorithm as this problem seemed familiar to me from the many graph-related problems I solved in CPSC 110. The key to this problem was to create a boolean matrix that could represent the visited paths. The backtracking algorithm would move the character in each orthogonal direction. What finally made me solve the problem was allowing the character to move out of bounds, and pruning this case from the backtracking algorithm entirely. With a lot of debugging, I solved this problem with perfect time and decent memory usage."
+        blog: "Unique paths III is considered an “easy” hard problem, but I found it incredibly useful for developing recursive intuition that would leak its way into many other hard problems I tried. I knew I had to implement a backtracking algorithm as this problem seemed familiar to me from the many graph-related problems I solved in CPSC 110. The key to this problem was to create a boolean matrix that could represent visited paths. Here, the backtracking algorithm would move the character in each orthogonal direction. What finally alowed me to solve this problem was allowing the character to move out of bounds, subsequently pruning this case from the backtracking algorithm entirely. With a lot of debugging, I solved this problem with perfect time and decent memory usage."
       },
       {
         id: 3,
         number: "1028",
         title: "Recover a Tree From Preorder Traversal",
         imagePath: "images/1028_solution.png",
-        blog: "This is the only hard binary tree problem I have solved so far, and I found it to be less challenging than many medium difficulty problems that made me nearly lose my mind. After staring at this problem on pen and paper for nearly 20 minutes, I came to the conclusion that I could store node information in a hashmap, and use the associated values to generate a binary tree in order that the nodes were given to me. I eventually realized that these numbers can be bigger than 9. From here I used a while loop to identify each number, and finally debug the code. This solution has a fast runtime and not great memory usage."
+        blog: "This is the only hard binary tree problem I have solved so far, and I found it to be less challenging than many medium difficulty problems that made me nearly lose my mind. After staring at this problem on pen and paper for nearly 20 minutes, I came to the conclusion that I could store node information in a hashmap, and use the associated values to generate a binary tree in order that the nodes were given to me. Sadly, I eventually realized that these numbers can be bigger than 9. From, here I used a while loop to identify each number, and I finally debugged the code. This solution has a fast runtime and decent memory usage."
       },
       {
         id: 4,
         number: "135",
         title: "Candy",
         imagePath: "images/135_solution.png",
-        blog: "Candy is the first hard problem I have encountered, and I’m drawn by how simple its description is. I thought of many non-working solutions to this problem over the past few months, but I finally came to my solution fairly quickly after solving “Trapping Rain Water”. Upon writing a few of my own test cases with pen and paper, I got the intuition that I could sweep back and forth through the array, storing potential values in a hashmap. By taking the maximum of these two values my solution finally worked, to my surprise. My solution does not have great runtime or memory usage."
+        blog: "Candy is the first hard problem that I have encountered, and I’m drawn by how simple its description is. I thought of many non-working solutions to this problem over the past few months, but I finally came to my solution fairly quickly after solving “Trapping Rain Water”. Upon writing a few of my own test cases with pen and paper, I got the intuition that I could sweep back and forth through the array, storing potential values in a hashmap. By taking the maximum of these two values my solution finally worked. It does not have great runtime or memory usage."
       },
       {
         id: 5,
         number: "149",
         title: "Max Points on a Line",
         imagePath: "images/149_solution.png",
-        blog: "This problem is entirely math-based, and it did not take me too long to solve. I used Desmos, the graphing calculator to help represent the data of the test cases, and some of my own. I quickly came to the conclusion that points with a similar slope could be found on the same line, and with some grade 9 math and a lot of edge-cases, my solution worked with okay runtime and memory usage."
+        blog: "This problem is entirely math-based, and it did not take me too long to solve. I used Desmos, the graphing calculator to help represent the data of the test-cases, and some of my own. I quickly came to the conclusion that points with a similar slope could be found on the same line, and with some grade-9 math and a lot of edge-cases, my solution worked with okay runtime and memory usage."
       },
       {
         id: 6,
         number: "68",
         title: "Text Justification",
         imagePath: "images/68_solution.png",
-        blog: "This problem was very nearly my first hard problem that I solved, if not for the annoying amount of conditions and edge cases. I approached this problem again recently, and with enough patience and variable naming, I got a solution that was not too hard to find with perfect runtime and great memory usage."
+        blog: "This problem was very nearly my first hard problem that I solved if not for the annoying amount of conditions and edge cases. I approached this problem again recently, and with enough patience and variable naming I got a solution that was not too hard to find with perfect runtime and great memory usage."
       },
       {
         id: 7,
         number: "10",
         title: "Regular Expression Matching",
         imagePath: "images/10_solution.png",
-        blog: "I spent an incredible amount of time on this problem using while loops, until I retired to the problem weeks later with a renewed sense of dynamic programming. The amount of edge cases in my original solution became unbearable, but by reconsidering the state of the problem, and how the expression evolved with additional characters, I found the solution to be tolerable. This problem was also made easier by my understanding of DFA’s from CPSC 121. My solution has okay runtime and decent memory usage."
+        blog: "I spent an incredible amount of time on this problem using while loops, until I retired to the problem weeks later with a renewed sense of dynamic programming. The amount of edge-cases in my original solution became unbearable, but by reconsidering the state of the problem and how the expression evolved with additional characters, I found the solution to be tolerable. This problem was also made easier with my understanding of DFA’s from CPSC 121. My solution has okay runtime and decent memory usage."
       },
       {
         id: 8,
@@ -321,7 +321,7 @@
         number: "76",
         title: "Minimum Window Substring",
         imagePath: "images/76_solution.png",
-        blog: "Typically, array problems are my favourite, but this problem took me forever to finally pass all test cases. I pretty quickly came to the conclusion that I would have to use a sliding window to ensure this problem could finish executing before the day was over. but with the addition of a hashmap to store values I finally got working code. My solution does not have great runtime or memory usage."
+        blog: "Typically, array problems are my favourite, but this problem took me forever to finally pass all of its test cases. I pretty quickly came to the conclusion that I would have to use a sliding window to ensure this problem could finish executing before the day was over. With the addition of a hashmap to store values, I finally got working code. My solution does not have great runtime or memory usage."
       },
       {
         id: 10,
@@ -342,7 +342,7 @@
         number: "25",
         title: "Reverse Nodes in k-Group",
         imagePath: "images/25_solution.png",
-        blog: "This problem is actually fairly similar to a lab problem I solved in CPSC 221. With a thorough understanding of the linked-list data structure, and a simple algorithm to reverse values, I finally came up with a working solution that has great runtime and memory usage."
+        blog: "This problem is actually fairly similar to a lab problem that I solved in CPSC 221. With a thorough understanding of the linked-list data structure and a simple algorithm to reverse values, I finally came up with a working solution that has great runtime and memory usage."
       }
     ];
 
