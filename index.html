@@ -265,84 +265,85 @@
         number: "352",
         title: "Data Stream as Disjoint Intervals",
         imagePath: "images/352_solution.png", // Replace with your actual image paths
-        blog: "This solution uses a disjoint-set (union-find) approach to efficiently track intervals as they form. Each value maps to its interval endpoint, allowing constant-time merging of adjacent intervals. The time complexity is dominated by the sorting operation in getIntervals(), making it O(n log n) where n is the number of unique values added."
+        blog: "I first approached the problem via the “Random Question” button, and the gears in my head immediately started turning. This question requires the design of multiple functions, but when I heard the word “disjoint”, I immediately thought of CPSC 221 and our discussion surrounding disjoint sets. I started to draw a diagram of the first test case, and I implemented the addNum function using an unordered map. Thankfully, this intuition brought me surprisingly close to the solution, and with very little error. My second intuition was to add each value to an array that I would sort at the beginning of each getIntervals call. With some debugging, this design eventually worked with perfect runtime, and decent memory usage."
       },
       {
         id: 2,
         number: "980",
         title: "Unique Paths III",
         imagePath: "images/980_solution.png",
-        blog: "This solution uses backtracking to find all possible paths that visit every empty cell exactly once. The key insight is tracking both visited cells with a boolean matrix and remaining steps to ensure we've visited all empty cells. Time complexity is O(3^(N*M)) as we have at most 3 directions to explore at each step (can't go back to the previous cell)."
+        blog: "Unique paths III is considered an “easy” hard problem, but I found it incredibly useful for developing recursive intuition that would leak its way into many other hard problems. I knew I had to implement a backtracking algorithm as this problem seemed familiar to me from the many graph-related problems I solved in CPSC 110. The key to this problem was to create a boolean matrix that could represent the visited paths. The backtracking algorithm would move the character in each orthogonal direction. What finally made me solve the problem was allowing the character to move out of bounds, and pruning this case from the backtracking algorithm entirely. With a lot of debugging, I solved this problem with perfect time and decent memory usage."
       },
       {
         id: 3,
         number: "1028",
         title: "Recover a Tree From Preorder Traversal",
         imagePath: "images/1028_solution.png",
-        blog: "This problem requires parsing a string representation of a binary tree's preorder traversal with depth information. The key insight is using a map to track the last node seen at each depth level, which serves as the parent for the next node at a deeper level. This single-pass approach achieves O(n) time complexity, where n is the length of the input string."
+        blog: "This is the only hard binary tree problem I have solved so far, and I found it to be less challenging than many medium difficulty problems that made me nearly lose my mind. After staring at this problem on pen and paper for nearly 20 minutes, I came to the conclusion that I could store node information in a hashmap, and use the associated values to generate a binary tree in order that the nodes were given to me. I eventually realized that these numbers can be bigger than 9. From here I used a while loop to identify each number, and finally debug the code. This solution has a fast runtime and not great memory usage."
       },
       {
         id: 4,
         number: "135",
         title: "Candy",
         imagePath: "images/135_solution.png",
-        blog: "This solution uses a two-pass approach to ensure that each child with a higher rating gets more candies than their neighbors. The first pass assigns candies based on left-to-right comparisons, and the second pass adjusts for right-to-left comparisons, taking the maximum value needed to satisfy both constraints. The algorithm achieves an optimal O(n) time complexity."
+        blog: "Candy is the first hard problem I have encountered, and I’m drawn by how simple its description is. I thought of many non-working solutions to this problem over the past few months, but I finally came to my solution fairly quickly after solving “Trapping Rain Water”. Upon writing a few of my own test cases with pen and paper, I got the intuition that I could sweep back and forth through the array, storing potential values in a hashmap. By taking the maximum of these two values my solution finally worked, to my surprise. My solution does not have great runtime or memory usage."
       },
       {
         id: 5,
         number: "149",
         title: "Max Points on a Line",
         imagePath: "images/149_solution.png",
-        blog: "Finding the maximum number of points on a line requires checking all possible lines. This solution first handles vertical lines separately, then computes slopes between each pair of points to count collinear points. By storing slope frequencies in a hash map, we achieve O(n²) time complexity, which is optimal for this problem as we must check all pairs of points."
+        blog: "This problem is entirely math-based, and it did not take me too long to solve. I used Desmos, the graphing calculator to help represent the data of the test cases, and some of my own. I quickly came to the conclusion that points with a similar slope could be found on the same line, and with some grade 9 math and a lot of edge-cases, my solution worked with okay runtime and memory usage."
       },
       {
         id: 6,
         number: "68",
         title: "Text Justification",
         imagePath: "images/68_solution.png",
-        blog: "Text justification requires careful management of spaces between words. The approach involves greedy line filling, calculating even distribution of spaces, with special handling for the last line (left-justified) and lines with a single word. The algorithm has O(n) time complexity where n is the total number of characters across all words."
+        blog: "This problem was very nearly my first hard problem that I solved, if not for the annoying amount of conditions and edge cases. I approached this problem again recently, and with enough patience and variable naming, I got a solution that was not too hard to find with perfect runtime and great memory usage."
       },
       {
         id: 7,
         number: "10",
         title: "Regular Expression Matching",
         imagePath: "images/10_solution.png",
-        blog: "This dynamic programming solution uses a 2D boolean array where dp[i][j] represents whether the first i characters of the input string match the first j characters of the pattern. We handle special cases for the wildcard character '*' which can match zero or more of the preceding element. The time complexity is O(m*n) where m and n are the lengths of the input string and pattern respectively."
+        blog: "I spent an incredible amount of time on this problem using while loops, until I retired to the problem weeks later with a renewed sense of dynamic programming. The amount of edge cases in my original solution became unbearable, but by reconsidering the state of the problem, and how the expression evolved with additional characters, I found the solution to be tolerable. This problem was also made easier by my understanding of DFA’s from CPSC 121. My solution has okay runtime and decent memory usage. "
       },
       {
         id: 8,
         number: "23",
         title: "Merge K Sorted Lists",
         imagePath: "images/23_solution.png",
-        blog: "This solution iteratively merges the k sorted linked lists by always selecting the smallest value from among the heads of all remaining lists. We keep track of which nodes have been processed and systematically build a new merged linked list. The time complexity is O(N*k) where N is the total number of nodes across all lists and k is the number of lists."
+        blog: "This is the first hard problem I ever successfully solved, and it has very poor runtime and memory usage. I don’t remember how I first encountered this problem, but my knowledge of merge sort from CPSC 221 saved my life. With the use of linked lists and while loops I developed my solution somewhat quickly. I also chose not to solve this problem recursively, because at this time my recursive intuition with C++ was not a strength of mine, and I could debug/visualise the problem much better using conditional loops.
+"
       },
       {
         id: 9,
         number: "76",
         title: "Minimum Window Substring",
         imagePath: "images/76_solution.png",
-        blog: "This solution uses the sliding window technique with two pointers. We maintain frequency maps for both the target string and our current window, expanding the window until all required characters are included, then contracting it to find the minimum valid window. This achieves O(n) time complexity where n is the length of the input string."
+        blog: "Typically, array problems are my favourite, but this problem took me forever to finally pass all test cases. I pretty quickly came to the conclusion that I would have to use a sliding window to ensure this problem could finish executing before the day was over. but with the addition of a hashmap to store values I finally got working code. My solution does not have great runtime or memory usage."
       },
       {
         id: 10,
         number: "42",
         title: "Trapping Rain Water",
         imagePath: "images/42_solution.png",
-        blog: "This solution uses two passes with stack-based approach to calculate trapped water. First, we calculate potential trapping from right to left, then we calculate actual trapped water by comparing with the left-to-right potential. The key insight is that water can only be trapped if there are higher bars on both sides. The algorithm achieves O(n) time complexity."
+        blog: "I was pretty excited with my solution to this problem because I thought I developed a genius insight from scratch. Unfortunately, my runtime and memory usage for this problem are pretty terrible, but my idea to use a monotonic stack that scans back and forth through the array helped me solve many later problems, like Candy."
       },
       {
         id: 11,
         number: "1402",
         title: "Reducing Dishes",
         imagePath: "images/1402_solution.png",
-        blog: "This solution sorts the satisfaction values and strategically determines which negative values to include in the cooking sequence to maximize the total satisfaction. For each possible inclusion of negative values, we calculate the resulting satisfaction sum and track the maximum. This greedy approach has a time complexity of O(n²) in the worst case."
+        blog: "This problem frustrated me a lot because I would constantly run into exceeded runtime errors. My insight to use a prefix sum to calculate the cost of each decision got me far, but with some minor tweaks and optimizations I got the code to finally work after many, many submissions."
       },
       {
         id: 12,
         number: "25",
         title: "Reverse Nodes in k-Group",
         imagePath: "images/25_solution.png",
-        blog: "This solution first converts the linked list to an array, then performs the k-group reversal operations on the array representation before reconstructing the linked list. This approach simplifies the complex pointer manipulation that would otherwise be required. The time complexity is O(n) where n is the number of nodes in the linked list."
+        blog: "This problem is actually fairly similar to a lab problem I solved in CPSC 221. With a thorough understanding of the linked-list data structure, and a simple algorithm to reverse values, I finally came up with a working solution that has great runtime and memory usage."
       }
     ];
 
